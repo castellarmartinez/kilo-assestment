@@ -5,39 +5,49 @@ export default function Zones() {
   const [error, setError] = useState(null);
   const [selectedZones, setSelectedZones] = useState([]);
   const [awards, setAwards] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [hasPreviousPage, setHasPreviousPage] = useState(false);
 
-  useEffect(() => {
-    async function fetchZones() {
-      try {
-        const response = await fetch("https://jump.javin.io:5000/api/zones");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch zones: ${response.status}`);
-        }
-        const result = await response.json();
-
-        const formattedZones = result.data.map((zoneObj) => {
-          //const key = `${index + 1}`;
-          const key = Object.keys(zoneObj)[0];
-          return zoneObj[key];
-        });
-
-        setZones(formattedZones);
-      } catch (error) {
-        console.error("Error fetching zones:", error);
-        setError("Failed to load zones.");
+  async function fetchZones() {
+    try {
+      const response = await fetch("https://jump.javin.io:5000/api/zones");
+      if (!response.ok) {
+        throw new Error(`Failed to fetch zones: ${response.status}`);
       }
-    }
-    fetchZones();
-  }, []);
+      const result = await response.json();
 
-  const fetchAwards = async (zoneIds) => {
+      const formattedZones = result.data.map((zoneObj) => {
+        //const key = `${index + 1}`;
+        const key = Object.keys(zoneObj)[0];
+        return zoneObj[key];
+      });
+
+      setZones(formattedZones);
+    } catch (error) {
+      console.error("Error fetching zones:", error);
+      setError("Failed to load zones.");
+    }
+  }
+
+  async function fetchAwards(zoneIds, page) {
     setError(null);
     console.log("zoneIds", zoneIds);
 
     try {
-      const promises = zoneIds.map((zoneId) =>
-        fetch(`https://jump.javin.io:5000/api/awards?zone=${zoneId}`)
-      );
+      const promises = zoneIds.map((zoneId) => {
+        if (page) {
+          return fetch(
+            `https://jump.javin.io:5000/api/awards?zone=${zoneId}&page=${page}&limit=10`
+          );
+        }
+
+        return fetch(
+          `https://jump.javin.io:5000/api/awards?zone=${zoneId}&limit=10`
+        );
+      });
+
       const responses = await Promise.all(promises);
 
       for (const response of responses) {
@@ -56,26 +66,45 @@ export default function Zones() {
       );
       console.log("combinedAwards", combinedAwards);
 
+      const pagination = result[0]?.pagination;
+      console.log("pagination", pagination);
+      setTotalPages(pagination?.total_pages || 1);
+      setHasNextPage(pagination?.has_next || false);
+      setHasPreviousPage(pagination?.has_previous || false);
+
       setAwards(combinedAwards);
     } catch (error) {
       console.error("Error fetching awards:", error);
       setError("Failed to load awards.");
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchZones();
+  }, []);
 
   useEffect(() => {
     if (selectedZones.length > 0) {
-      fetchAwards(selectedZones);
+      fetchAwards(selectedZones, currentPage);
     } else {
       setAwards([]); // We clear awards in case no sone is selected
     }
   }, [selectedZones]);
 
-  const handleZoneChange = (event) => {
+  function handleZoneChange(event) {
     const selectedOptions = Array.from(event.target.selectedOptions);
     const selectedZoneIds = selectedOptions.map((option) => option.value);
     setSelectedZones(selectedZoneIds);
-  };
+  }
+
+  function handleNextPage() {
+    setCurrentPage((prevPage) => prevPage + 1);
+    console.log()
+  }
+
+  function handlePreviousPage() {
+    setCurrentPage((prevPage) => prevPage - 1);
+  }
 
   return (
     <section id="zones">
@@ -123,6 +152,20 @@ export default function Zones() {
                     </li>
                   ))}
                 </ul>
+                <div className="pagination">
+                  <button
+                    onClick={handlePreviousPage}
+                    disabled={!hasPreviousPage}
+                  >
+                    Previous
+                  </button>
+                  <span>
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button onClick={handleNextPage} disabled={!hasNextPage}>
+                    Next
+                  </button>
+                </div>
               </div>
             )}
           </>
