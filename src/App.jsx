@@ -1,5 +1,3 @@
-import CoreConcepts from "./components/CoreConcepts";
-import Examples from "./components/Examples";
 import Header from "./components/Header/Header";
 import Zones from "./components/Zones";
 
@@ -9,8 +7,8 @@ function App() {
       <Header></Header>
       <main>
         <Zones></Zones>
-        <CoreConcepts></CoreConcepts>
-        <Examples></Examples>
+        {/* <CoreConcepts></CoreConcepts>
+        <Examples></Examples> */}
       </main>
     </>
   );

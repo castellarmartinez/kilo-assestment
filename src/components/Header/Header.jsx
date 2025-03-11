@@ -6,7 +6,6 @@ export default function Header() {
     <header>
       <img src={reactImage} alt="Stylized atom" />
       <h1>Kilo Coding Challenge</h1>
-      <p>Data to help you win a permit!</p>
     </header>
   );
 }

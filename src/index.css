@@ -125,25 +125,60 @@ main button {
   font-size: 1rem;
 }
 
-#zones {
-  margin: 3rem auto;
-  padding: 2rem;
-  border-radius: 6px;
-  background-color: #140524;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+#zones form {
+  margin-bottom: 2rem;
 }
 
-#zones h2 {
-  text-align: center;
+#zones label {
+  display: block;
+  margin-bottom: 0.5rem;
   font-family: "Roboto Condensed", sans-serif;
-  margin: 0 0 1.5rem 0;
   color: #a18aba;
 }
 
-#zones .zones-list ul {
+#zones select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #2f1d43;
+  background-color: #2f1d43;
+  color: #ebe7ef;
+  font-family: "Quicksand", sans-serif;
+}
+
+#zones select:focus {
+  outline: none;
+  border-color: #7925d3;
+}
+
+#zones select[multiple] {
+  height: 10rem;
+}
+
+
+#zones .selected-zones {
+  margin-top: 1rem;
+}
+
+#zones .selected-zones h3 {
+  font-family: "Roboto Condensed", sans-serif;
+  color: #a18aba;
+}
+
+#zones .selected-zones ul {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+#zones .selected-zones li {
+  padding: 0.5rem;
+  border: 1px solid #2f1d43;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  background-color: #2f1d43;
+  color: #ebe7ef;
+  font-family: "Quicksand", sans-serif;
 }
 
 #zones .zones-list li {
@@ -159,14 +194,4 @@ main button {
 #zones .zones-list li:hover {
   background-color: #3a2a4f;
   border-color: #7925d3;
-}
-
-#zones .zones-list p {
-  text-align: center;
-  color: #8964b0;
-  font-family: "Roboto Condensed", sans-serif;
-}
-
-#zones #zones-error {
-  color: red;
 }
