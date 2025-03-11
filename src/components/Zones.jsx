@@ -5,7 +5,7 @@ export default function Zones() {
   const [error, setError] = useState(null);
   const [selectedZones, setSelectedZones] = useState([]);
   const [awards, setAwards] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [hasPreviousPage, setHasPreviousPage] = useState(false);
@@ -32,6 +32,7 @@ export default function Zones() {
   }
 
   async function fetchAwards(zoneIds, page) {
+    console.log("page", page)
     setError(null);
     console.log("zoneIds", zoneIds);
 
