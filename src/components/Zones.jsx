@@ -32,7 +32,7 @@ export default function Zones() {
   }
 
   async function fetchAwards(zoneIds, page) {
-    console.log("page", page)
+    console.log("page", page);
     setError(null);
     console.log("zoneIds", zoneIds);
 
@@ -90,17 +90,18 @@ export default function Zones() {
     } else {
       setAwards([]); // We clear awards in case no sone is selected
     }
-  }, [selectedZones]);
+  }, [selectedZones, currentPage]);
 
   function handleZoneChange(event) {
     const selectedOptions = Array.from(event.target.selectedOptions);
     const selectedZoneIds = selectedOptions.map((option) => option.value);
     setSelectedZones(selectedZoneIds);
+    setCurrentPage(0);
   }
 
   function handleNextPage() {
     setCurrentPage((prevPage) => prevPage + 1);
-    console.log()
+    console.log("currentPage", currentPage);
   }
 
   function handlePreviousPage() {
